@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>SetDate</title>
+    <link rel="icon" href="./images/yes.png" type="img/123.jpg" />
+    <link rel="stylesheet" href="./CSS/main.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 60%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            margin-bottom: 20%;
+        }
+
+        table,
+        th,
+        td {
+            border: 2px solid #0c0e0d;
+            font-size: 30px;
+
+        }
+
+        th,
+        td {
+            padding: 20px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="date"] {
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #015122;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #030101;
+        }
+
+        H2 {
+            padding: 50px;
+
+            text-align: center;
+            font-size: 50px;
+
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <h2>研討會日期設定</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>日期</th>
+                <th>時間</th>
+                <th>地點</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="date" id="newDate" name="date"></td>
+                <td><input type="time" id="newTime" name="time"></td>
+                <td><input type="text" id="newLocation" name="location"></td>
+                <td><button onclick="saveDate()">儲存</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="addedDates">
+        <!-- 這裡會動態顯示新增的日期 -->
+    </div>
+
+    <script>
+        function saveDate() {
+            // 獲取新的日期、時間和地點
+            var newDate = document.getElementById('newDate').value;
+            var newTime = document.getElementById('newTime').value;
+            var newLocation = document.getElementById('newLocation').value;
+
+            // 創建新的表格行
+            var newRow = document.createElement('tr');
+            newRow.innerHTML = '<td>' + newDate + '</td>' +
+                '<td>' + newTime + '</td>' +
+                '<td>' + newLocation + '</td>' +
+                '<td></td>'; // 空白列
+
+            // 將新行添加到表格中
+            document.querySelector('tbody').appendChild(newRow);
+
+            // 清空輸入欄位
+            document.getElementById('newDate').value = '';
+            document.getElementById('newTime').value = '';
+            document.getElementById('newLocation').value = '';
+
+            // 顯示新增的日期
+            document.getElementById('addedDates').innerHTML += '新增的日期：' + newDate + '<br>';
+        }
+    </script>
+</body>
+
+
+</html>

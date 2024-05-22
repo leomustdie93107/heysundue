@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Registration</title>
+    <link rel="icon" href="./images/yes.png" type="img/123.jpg" />
+    <link rel="stylesheet" href="./CSS/main.css">
+
+    <style>
+        form {
+            width: 30%;
+            /* 設置表單寬度 */
+            margin: 0 auto;
+            /* 使表單水平置中 */
+            padding: 20px;
+            /* 設置表單內容區的內邊距 */
+            background-color: #f0f0f0;
+            /* 表單背景色 */
+            border-radius: 8px;
+            /* 圓角邊框 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* 添加陰影效果 */
+        }
+
+        /* 表單內容的每一行 */
+        .form-row {
+            display: flex;
+            margin-bottom: 30px;
+            /* 設置每行之間的間距 */
+        }
+
+        /* 標籤 */
+        label {
+
+            width: 30%;
+            /* 設置標籤寬度 */
+            text-align: left;
+            /* 將標籤文字右對齊 */
+            margin-right: 2px;
+            /* 設置標籤和欄位之間的間距 */
+        }
+
+        /* 輸入欄位 */
+        input {
+            flex: 1;
+            /* 讓輸入欄位自動填滿剩餘寬度 */
+
+        }
+
+        select {
+            flex: 1;
+            /* 佔滿可用寬度的兩倍 */
+            padding: 3px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
+
+        button {
+            flex: 1;
+            /* 佔滿可用寬度 */
+            padding: 8px;
+            box-sizing: border-box;
+            margin-top: 1px;
+
+        }
+
+
+        H2 {
+            padding: 50px;
+
+            text-align: center;
+            font-size: 50px;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Registration Category設定</h2>
+
+    <form>
+
+        <div class="form-row">
+            <label for="field4">顯示狀態:</label>
+            <select id="field4" name="field4" required>
+                <option value="option1">開放</option>
+                <option value="option2">不開放
+                </option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="field2">顯示場合:</label>
+            <select id="field2" name="field2" required>
+                <option value="option1">國內</option>
+                <option value="option2">國外</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label for="field3">Item Name:</label>
+            <input type="text" id="field3" name="field3" required>
+        </div>
+
+        <div class="form-row">
+            <label for="field1">Total Amount:</label>
+            <input type="text" id="field1" name="field1" required>
+        </div>
+
+        <div class="form-row">
+            <label for="field5">Total Amount USD:</label>
+            <input type="text" id="field5" name="field5" required>
+        </div>
+
+        <div class="form-row">
+            <button type="submit">Total Amount NTD</button>
+        </div>
+
+    </form>
+</body>
+
+
+</html>
