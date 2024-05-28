@@ -4,77 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <title>Registration</title>
-    <link rel="icon" href="./images/yes.png" type="img/123.jpg" />
+    <title>Registration Category設定</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./CSS/main.css">
-
     <style>
-        form {
-            width: 30%;
-            /* 設置表單寬度 */
-            margin: 0 auto;
-            /* 使表單水平置中 */
-            padding: 20px;
-            /* 設置表單內容區的內邊距 */
-            background-color: #f0f0f0;
-            /* 表單背景色 */
-            border-radius: 8px;
-            /* 圓角邊框 */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* 添加陰影效果 */
-        }
-
-        /* 表單內容的每一行 */
-        .form-row {
-            display: flex;
-            margin-bottom: 30px;
-            /* 設置每行之間的間距 */
-        }
-
-        /* 標籤 */
-        label {
-
-            width: 30%;
-            /* 設置標籤寬度 */
-            text-align: left;
-            /* 將標籤文字右對齊 */
-            margin-right: 2px;
-            /* 設置標籤和欄位之間的間距 */
-        }
-
-        /* 輸入欄位 */
-        input {
-            flex: 1;
-            /* 讓輸入欄位自動填滿剩餘寬度 */
-
-        }
-
-        select {
-            flex: 1;
-            /* 佔滿可用寬度的兩倍 */
-            padding: 3px;
-            box-sizing: border-box;
-            margin-bottom: 5px;
-        }
-
-        button {
-            flex: 1;
-            /* 佔滿可用寬度 */
-            padding: 8px;
-            box-sizing: border-box;
-            margin-top: 1px;
-
-        }
-
-
-        H2 {
+        h2 {
             padding: 50px;
-
             text-align: center;
             font-size: 50px;
+        }
 
+        /* 自定義表格樣式 */
+        .custom-table-header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* 自定義表格行樣式 */
+        .custom-table-row {
+            background-color: #f8f9fa;
+        }
+
+        /* 自定義表格內容樣式 */
+        .custom-table-content {
+            color: #343a40;
         }
     </style>
 </head>
@@ -83,46 +36,57 @@
 
     <h2>Registration Category設定</h2>
 
-    <form>
+    <div class="container">
+        <form>
+            <div class="row mb-3">
+                <label for="field4" class="col-sm-2 col-form-label">顯示狀態:</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="field4" name="field4" required>
+                        <option value="option1">開放</option>
+                        <option value="option2">不開放</option>
+                    </select>
+                </div>
+            </div>
 
-        <div class="form-row">
-            <label for="field4">顯示狀態:</label>
-            <select id="field4" name="field4" required>
-                <option value="option1">開放</option>
-                <option value="option2">不開放
-                </option>
-            </select>
-        </div>
+            <div class="row mb-3">
+                <label for="field2" class="col-sm-2 col-form-label">顯示場合:</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="field2" name="field2" required>
+                        <option value="option1">國內</option>
+                        <option value="option2">國外</option>
+                    </select>
+                </div>
+            </div>
 
-        <div class="form-row">
-            <label for="field2">顯示場合:</label>
-            <select id="field2" name="field2" required>
-                <option value="option1">國內</option>
-                <option value="option2">國外</option>
-            </select>
-        </div>
+            <div class="row mb-3">
+                <label for="field3" class="col-sm-2 col-form-label">Item Name:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="field3" name="field3" required>
+                </div>
+            </div>
 
-        <div class="form-row">
-            <label for="field3">Item Name:</label>
-            <input type="text" id="field3" name="field3" required>
-        </div>
+            <div class="row mb-3">
+                <label for="field1" class="col-sm-2 col-form-label">Total Amount:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="field1" name="field1" required>
+                </div>
+            </div>
 
-        <div class="form-row">
-            <label for="field1">Total Amount:</label>
-            <input type="text" id="field1" name="field1" required>
-        </div>
+            <div class="row mb-3">
+                <label for="field5" class="col-sm-2 col-form-label">Total Amount USD:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="field5" name="field5" required>
+                </div>
+            </div>
 
-        <div class="form-row">
-            <label for="field5">Total Amount USD:</label>
-            <input type="text" id="field5" name="field5" required>
-        </div>
+            <div class="row mb-3">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">Total Amount NTD</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
-        <div class="form-row">
-            <button type="submit">Total Amount NTD</button>
-        </div>
-
-    </form>
 </body>
-
 
 </html>
