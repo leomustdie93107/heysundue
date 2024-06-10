@@ -11,6 +11,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
 
+
 // Add DbContext and ConfigureServices
 builder.Services.AddDbContext<ArticleContext>(options =>
 {

@@ -1,0 +1,31 @@
+@model Heysundue.Models.Article
+
+@{
+    ViewData["Title"] = "研討會日期設定";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="Time" class="control-label"></label>
+        <input asp-for="Time" class="form-control" />
+        <span asp-validation-for="Time" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Location" class="control-label"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <input type="submit" value="儲存" class="btn btn-primary" />
+    </div>
+</form>

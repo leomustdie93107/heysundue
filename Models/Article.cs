@@ -7,10 +7,15 @@ namespace Heysundue.Models
     {
         public int ID { get; set; }
         public string? Number { get; set; }
-	public string? Title { get; set; }
-	public string? Link { get; set; }
+	    ///public string? Title { get; set; }
+	    //public string? Link { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string? Gender { get; set; }
         public decimal Count { get; set; }
+
+        public DateTime Date { get; set; }
+        public TimeSpan Time { get; set; }
+        public string? Location { get; set; }
+
     }
 }
