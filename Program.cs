@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Heysundue.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Heysundue.Models;
+using MvcMovie.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 var env = builder.Environment;
@@ -10,6 +11,8 @@ var env = builder.Environment;
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<MvcMovieContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
 
 
 // Add DbContext and ConfigureServices
