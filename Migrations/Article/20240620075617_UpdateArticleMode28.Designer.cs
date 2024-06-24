@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Heysundue.Migrations.Article
 {
     [DbContext(typeof(ArticleContext))]
-    partial class ArticleContextModelSnapshot : ModelSnapshot
+    [Migration("20240620075617_UpdateArticleMode28")]
+    partial class UpdateArticleMode28
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -169,7 +172,12 @@ namespace Heysundue.Migrations.Article
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PersonID")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("PersonID");
 
                     b.ToTable("Persons");
                 });
@@ -207,9 +215,21 @@ namespace Heysundue.Migrations.Article
                         .HasForeignKey("JoinlistID");
                 });
 
+            modelBuilder.Entity("Heysundue.Models.Person", b =>
+                {
+                    b.HasOne("Heysundue.Models.Person", null)
+                        .WithMany("AllPersons")
+                        .HasForeignKey("PersonID");
+                });
+
             modelBuilder.Entity("Heysundue.Models.Joinlist", b =>
                 {
                     b.Navigation("AllJoinlist");
+                });
+
+            modelBuilder.Entity("Heysundue.Models.Person", b =>
+                {
+                    b.Navigation("AllPersons");
                 });
 #pragma warning restore 612, 618
         }

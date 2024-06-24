@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Threading.Tasks;
 using Heysundue.Models;
 using Heysundue.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc; // 確保引入了這個命名空間
+
 
 namespace Heysundue.Pages
 {
@@ -14,28 +16,27 @@ namespace Heysundue.Pages
         public Joinlist2Model(ArticleContext context)
         {
             _context = context;
-            Joinlist = new Joinlist();
         }
 
-        [BindProperty]
-        public Joinlist Joinlist { get; set; }
+        public IList<Joinlist> Joinlists { get; set; }
 
-        public IActionResult OnGet()
+        public async Task OnGetAsync()
         {
-            return Page();
+            Joinlists = await _context.Joinlists.ToListAsync();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(Joinlist newJoinlist)
         {
             if (!ModelState.IsValid)
             {
+                Joinlists = await _context.Joinlists.ToListAsync();
                 return Page();
             }
 
-            _context.Joinlist.Add(Joinlist);
+            _context.Joinlists.Add(newJoinlist);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Joinlist2");
         }
     }
 }

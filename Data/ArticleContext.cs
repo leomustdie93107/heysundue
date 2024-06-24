@@ -19,7 +19,7 @@ public class ArticleContext : DbContext
 
     public DbSet<Login> Login { get; set; } = default!;
 
-    public DbSet<Joinlist> Joinlist { get; set; } = default!;
+    public DbSet<Joinlist> Joinlists { get; set; } = default!;
 
     public DbSet<Doorsystem>  Doorsystem { get; set; } = default!;
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Heysundue.Migrations.Article
 {
     [DbContext(typeof(ArticleContext))]
-    partial class ArticleContextModelSnapshot : ModelSnapshot
+    [Migration("20240619074552_UpdateArticleMode12")]
+    partial class UpdateArticleMode12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -115,9 +118,6 @@ namespace Heysundue.Migrations.Article
                     b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("JoinlistID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("LastName")
                         .HasColumnType("TEXT");
 
@@ -132,9 +132,7 @@ namespace Heysundue.Migrations.Article
 
                     b.HasKey("ID");
 
-                    b.HasIndex("JoinlistID");
-
-                    b.ToTable("Joinlists");
+                    b.ToTable("Joinlist");
                 });
 
             modelBuilder.Entity("Heysundue.Models.Login", b =>
@@ -198,18 +196,6 @@ namespace Heysundue.Migrations.Article
                     b.HasKey("ID");
 
                     b.ToTable("Registration");
-                });
-
-            modelBuilder.Entity("Heysundue.Models.Joinlist", b =>
-                {
-                    b.HasOne("Heysundue.Models.Joinlist", null)
-                        .WithMany("AllJoinlist")
-                        .HasForeignKey("JoinlistID");
-                });
-
-            modelBuilder.Entity("Heysundue.Models.Joinlist", b =>
-                {
-                    b.Navigation("AllJoinlist");
                 });
 #pragma warning restore 612, 618
         }
