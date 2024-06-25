@@ -61,3 +61,10 @@
    - RequestId : string?
    - ShowRequestId : bool
 
+## Database
+
+### Create [DbContext](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.dbcontext?view=efcore-8.0)
+
+1. Create `Data` folder
+2. Create `HeysundueContext.cs`
+3. Class name `HeysundueContext` derived from the class `DbContext`
