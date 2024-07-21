@@ -15,14 +15,14 @@ public class ArticleContext : DbContext
     public DbSet<Article> Article { get; set; } = default!;
     public DbSet<Person> Persons { get; set; } = default!;
 
-    public DbSet<Registration> Registration { get; set; } = default!;
+    public DbSet<Registration> Registrations { get; set; } = default!;
 
     public DbSet<Login> Login { get; set; } = default!;
 
     public DbSet<Joinlist> Joinlists { get; set; } = default!;
 
-    public DbSet<Doorsystem>  Doorsystem { get; set; } = default!;
+    public DbSet<Doorsystem>  Doorsystems { get; set; } = default!;
 
-    public DbSet<Accessdoor> Accessdoor { get; set; } = default!;
+    public DbSet<Accessdoor> Accessdoors { get; set; } = default!;
 
 }

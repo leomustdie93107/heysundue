@@ -6,34 +6,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Age</th>
-            <th>Gender</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Persons != null)
-        {
-            foreach (var person in Model.Persons)
-            {
-                <tr>
-                    <td>@person.ID</td>
-                    <td>@person.Age</td>
-                    <td>@person.Gender</td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="3">No persons available.</td>
-            </tr>
-        }
-    </tbody>
-</table>
 
 <form method="post">
     <div class="form-group">
@@ -58,3 +30,34 @@
         <input type="submit" value="儲存" class="btn btn-primary" />
     </div>
 </form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Persons != null)
+        {
+            foreach (var person in Model.Persons)
+            {
+                <tr>
+                    <td>@person.ID</td>
+                    <td>@person.Age</td>
+                    <td>@person.Gender</td>
+                    <td>@person.Name</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">No persons available.</td>
+            </tr>
+        }
+    </tbody>
+</table>

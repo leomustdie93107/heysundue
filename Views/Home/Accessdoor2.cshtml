@@ -1,4 +1,4 @@
-@model Heysundue.Models.Accessdoor
+@model Heysundue.Views.Home.Accessdoor2ViewModel
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>門禁系統</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -17,45 +19,142 @@
 
         <div class="row mb-3">
             <div class="col-auto">
-                <button class="btn btn-primary mb-2" onclick="showAddParticipantModal()">新增人員</button>
+                <button class="btn btn-primary mb-2" onclick="showAddParticipantModal()">新增會議</button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addParticipantModal" tabindex="-1" aria-labelledby="addParticipantModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addParticipantModalLabel">新增會議</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addParticipantForm" method="post" asp-page-handler="">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="mb-3">
+                                <label asp-for="Accessdoor.StartDate" class="form-label">開始日期 <span class="text-danger">*</span></label>
+                                <input asp-for="Accessdoor.StartDate" class="form-control" type="date" required />
+                                <span asp-validation-for="Accessdoor.StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Accessdoor.Room" class="form-label">房間 <span class="text-danger">*</span></label>
+                                <input asp-for="Accessdoor.Room" class="form-control" required />
+                                <span asp-validation-for="Accessdoor.Room" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Accessdoor.Session" class="form-label">會議 <span class="text-danger">*</span></label>
+                                <input asp-for="Accessdoor.Session" class="form-control" required />
+                                <span asp-validation-for="Accessdoor.Session" class="text-danger"></span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary">新增</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-1">
-                <label asp-for="StartDate">日期:</label>
+                <label for="searchDate">日期:</label>
             </div>
             <div class="col-2">
-                <select asp-for="SearchColumn" class="form-select text-uppercase bg-light">
-                    <option value="all">選擇日期:</option>
+                <select id="searchDate" class="form-select text-uppercase bg-light" onchange="disableOtherFilters()">
+                    <option value="">選擇日期:</option>
+                    @foreach (var date in Model.UniqueDates)
+                    {
+                        <option value="@date?.ToString("yyyy-MM-dd")">@date?.ToString("yyyy-MM-dd")</option>
+                    }
                 </select>
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-1">
-                <label asp-for="Room">Room</label>
+                <label for="searchRoom">房間:</label>
             </div>
             <div class="col-2">
-                <select asp-for="SearchColumn" class="form-select text-uppercase bg-light">
-                    <option value="all">請選擇</option>
+                <select id="searchRoom" class="form-select text-uppercase bg-light" onchange="disableOtherFilters()">
+                    <option value="">請選擇</option>
+                    @foreach (var room in Model.UniqueRooms)
+                    {
+                        <option value="@room">@room</option>
+                    }
                 </select>
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-1">
-                <label asp-for="Session">Session</label>
+                <label for="searchSession">會議:</label>
             </div>
             <div class="col-2">
-                <select asp-for="SearchColumn" class="form-select text-uppercase bg-light">
-                    <option value="all">請選擇</option>
+                <select id="searchSession" class="form-select text-uppercase bg-light" onchange="disableOtherFilters()">
+                    <option value="">請選擇</option>
+                    @foreach (var session in Model.UniqueSessions)
+                    {
+                        <option value="@session">@session</option>
+                    }
                 </select>
             </div>
         </div>
         <div class="col">
             <button class="btn btn-primary" onclick="search()">查詢</button>
-            <button class="btn btn-primary" onclick="searchall()">查詢全部</button>
+            <button class="btn btn-primary" onclick="searchAll()">查詢全部</button>
+        </div>
+
+        <div id="resultContainer" class="mt-4">
+            @await Html.PartialAsync("_AccessdoorTablePartial", Model.Accessdoors)
         </div>
     </div>
 
+    <script>
+        function showAddParticipantModal() {
+            document.getElementById("addParticipantForm").reset();
+            $('#addParticipantModal').modal('show');
+        }
+
+        function disableOtherFilters() {
+            const date = document.getElementById("searchDate").value;
+            const room = document.getElementById("searchRoom").value;
+            const session = document.getElementById("searchSession").value;
+
+            document.getElementById("searchDate").disabled = room || session;
+            document.getElementById("searchRoom").disabled = date || session;
+            document.getElementById("searchSession").disabled = date || room;
+        }
+
+        function search() {
+            const searchColumn = document.getElementById("searchDate").value ? "startdate" :
+                                 document.getElementById("searchRoom").value ? "room" : "session";
+            const searchKeyword = document.getElementById("searchDate").value || 
+                                  document.getElementById("searchRoom").value || 
+                                  document.getElementById("searchSession").value;
+
+            $.ajax({
+                url: '@Url.Action("SearchAccessdoor", "Home")',
+                type: 'POST',
+                data: {
+                    searchColumn: searchColumn,
+                    searchKeyword: searchKeyword
+                },
+                success: function (data) {
+                    $('#resultContainer').html(data);
+                }
+            });
+        }
+
+        function searchAll() {
+            $.ajax({
+                url: '@Url.Action("GetAllAccessdoors", "Home")',
+                type: 'GET',
+                success: function (data) {
+                    $('#resultContainer').html(data);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

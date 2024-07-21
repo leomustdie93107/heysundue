@@ -1,4 +1,4 @@
-@model Heysundue.Models.Joinlist
+@model Heysundue.Views.Home.Joinlist2ViewModel
 @using Heysundue.Models;
 
 @{
@@ -45,24 +45,6 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-2">
-                <label asp-for="StartDate">起始日期:</label>
-            </div>
-            <div class="col-2">
-                <input type="date" asp-for="StartDate" class="form-control">
-            </div>
-            <div class="col-2">
-                <label asp-for="EndDate">結束日期:</label>
-            </div>
-            <div class="col-3">
-                <input type="date" asp-for="EndDate" class="form-control">
-            </div>
-            <div class="col-2">
-                <button class="btn btn-primary" onclick="filterByDate()">篩選</button>
-            </div>
-        </div>
-
-        <div class="row mb-3">
             <div class="col">
                 <table class="table">
                     <thead class="custom-table-header">
@@ -76,74 +58,80 @@
                             <th>報到狀態</th>
                         </tr>
                     </thead>
-                    <tbody>@*
-        @foreach (var joinlist in Model)
-        {
-            <tr>
-                <td>@joinlist.RegNo</td>
-                <td>@joinlist.FirstName</td>
-                <td>@joinlist.LastName</td>
-                <td>@joinlist.ChineseName</td>
-                <td>@joinlist.Country</td>
-                <td>@joinlist.RegistrationStatus</td>
-            </tr>
-        }*@
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+                    <tbody id="joinlistTableBody">
+                @if (Model.Joinlists != null)
+                {
+                    foreach (var joinlist in Model.Joinlists)
+                    {
+                        <tr>
+                            <td>@joinlist.RegNo</td>
+                            <td>@joinlist.FirstName</td>
+                            <td>@joinlist.LastName</td>
+                            <td>@joinlist.ChineseName</td>
+                            <td>@joinlist.Country</td>
+                            <td>@joinlist.RegistrationStatus</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No joinlists available.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-    <!-- 新增人员模态框 -->
-    <div class="modal fade" id="addParticipantModal" tabindex="-1" aria-labelledby="addParticipantModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addParticipantModalLabel">新增人员</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addParticipantForm" method="post" asp-page-handler="">
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="mb-3">
-                            <label asp-for="RegNo" class="form-label">Reg. No. <span class="text-danger">*</span></label>
-                            <input asp-for="RegNo" class="form-control" required />
-                            <span asp-validation-for="RegNo" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="FirstName" class="form-label">First Name <span class="text-danger">*</span></label>
-                            <input asp-for="FirstName" class="form-control" required />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="LastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-                            <input asp-for="LastName" class="form-control" required />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="ChineseName" class="form-label">中文姓名 <span class="text-danger">*</span></label>
-                            <input asp-for="ChineseName" class="form-control" required />
-                            <span asp-validation-for="ChineseName" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Country" class="form-label">Country <span class="text-danger">*</span></label>
-                            <input asp-for="Country" class="form-control" required />
-                            <span asp-validation-for="Country" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="RegistrationStatus" class="form-label">報到狀態 <span class="text-danger">*</span></label>
-                            <input asp-for="RegistrationStatus" class="form-control" required />
-                            <span asp-validation-for="RegistrationStatus" class="text-danger"></span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                            <button type="submit" class="btn btn-primary">新增</button>
-                        </div>
-                    </form>
+        <!-- 新增人员模态框 -->
+        <div class="modal fade" id="addParticipantModal" tabindex="-1" aria-labelledby="addParticipantModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addParticipantModalLabel">新增人员</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addParticipantForm" method="post" asp-page-handler="">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="mb-3">
+                                <label asp-for="Joinlist.RegNo" class="form-label">Reg. No. <span class="text-danger">*</span></label>
+                                <input asp-for="Joinlist.RegNo" class="form-control" required />
+                                <span asp-validation-for="Joinlist.RegNo" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Joinlist.FirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input asp-for="Joinlist.FirstName" class="form-control" required />
+                                <span asp-validation-for="Joinlist.FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Joinlist.LastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input asp-for="Joinlist.LastName" class="form-control" required />
+                                <span asp-validation-for="Joinlist.LastName" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Joinlist.ChineseName" class="form-label">中文姓名 <span class="text-danger">*</span></label>
+                                <input asp-for="Joinlist.ChineseName" class="form-control" required />
+                                <span asp-validation-for="Joinlist.ChineseName" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Joinlist.Country" class="form-label">Country <span class="text-danger">*</span></label>
+                                <input asp-for="Joinlist.Country" class="form-control" required />
+                                <span asp-validation-for="Joinlist.Country" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Joinlist.RegistrationStatus" class="form-label">報到狀態 <span class="text-danger">*</span></label>
+                                <input asp-for="Joinlist.RegistrationStatus" class="form-control" required />
+                                <span asp-validation-for="Joinlist.RegistrationStatus" class="text-danger"></span>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary">新增</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
     <script>
         function showAddParticipantModal() {
@@ -154,13 +142,18 @@
         function searchKeyword() {
             var column = document.getElementById("searchColumn").value;
             var keyword = document.getElementById("searchKeyword").value;
-            // 执行搜索逻辑
-        }
 
-        function filterByDate() {
-            var startDate = document.getElementById("StartDate").value;
-            var endDate = document.getElementById("EndDate").value;
-            // 执行日期过滤逻辑
+            $.ajax({
+                url: '@Url.Action("SearchJoinlist", "Home")',
+                type: 'POST',
+                data: {
+                    searchColumn: column,
+                    searchKeyword: keyword
+                },
+                success: function (data) {
+                    $('#joinlistTableBody').html(data);
+                }
+            });
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,0 +1,21 @@
+@model List<Heysundue.Models.Accessdoor>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>開始日期</th>
+            <th>房間</th>
+            <th>會議</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var accessdoor in Model)
+        {
+            <tr>
+                <td>@accessdoor.StartDate?.ToString("yyyy-MM-dd")</td>
+                <td>@accessdoor.Room</td>
+                <td>@accessdoor.Session</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,4 @@
-@model Heysundue.Models.Doorsystem
+@model Heysundue.Views.Home.Doorsystem2ViewModel
 
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -19,7 +19,7 @@
         <form method="post">
             <div class="row mb-3">
                 <div class="col-auto">
-                    <button class="btn btn-primary mb-2" onclick="showAddDoorSystemModal()">新增門禁資訊</button>
+                    <button class="btn btn-primary mb-2" type="button" onclick="showAddDoorSystemModal()">新增門禁資訊</button>
                 </div>
             </div>
 
@@ -36,7 +36,25 @@
                             </tr>
                         </thead>
                         <tbody id="DoorSystemTable">
-                            <!-- 这里将动态生成门禁系统的数据行 -->
+                            @if (Model.Doorsystems != null && Model.Doorsystems.Any())
+                            {
+                                foreach (var doorsystem in Model.Doorsystems)
+                                {
+                                    <tr>
+                                        <td>@doorsystem.Date</td>
+                                        <td>@doorsystem.Session</td>
+                                        <td>@doorsystem.SessionName</td>
+                                        <td>@doorsystem.Room</td>
+                                        <td>@doorsystem.TimeRange</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5">No door systems available.</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -45,8 +63,7 @@
     </div>
 
     <!-- 新增门禁系统信息 -->
-    <div class="modal fade" id="addDoorSystemModal" tabindex="-1" aria-labelledby="addDoorSystemLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="addDoorSystemModal" tabindex="-1" aria-labelledby="addDoorSystemLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -56,24 +73,24 @@
                 <div class="modal-body">
                     <form id="addDoorSystemForm">
                         <div class="mb-3">
-                            <label asp-for="Date" class="form-label">日期<span class="text-danger">*</span></label>
-                            <input asp-for="Date" class="form-control" required>
+                            <label for="Doorsystem_Date" class="form-label">日期<span class="text-danger">*</span></label>
+                            <input id="Doorsystem_Date" name="Doorsystem.Date" class="form-control" required />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Session" class="form-label">Session<span class="text-danger">*</span></label>
-                            <input asp-for="Session" class="form-control" required>
+                            <label for="Doorsystem_Session" class="form-label">Session<span class="text-danger">*</span></label>
+                            <input id="Doorsystem_Session" name="Doorsystem.Session" class="form-control" required />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="SessionName" class="form-label">Session Name<span class="text-danger">*</span></label>
-                            <input asp-for="SessionName" class="form-control" required>
+                            <label for="Doorsystem_SessionName" class="form-label">Session Name<span class="text-danger">*</span></label>
+                            <input id="Doorsystem_SessionName" name="Doorsystem.SessionName" class="form-control" required />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Room" class="form-label">Room <span class="text-danger">*</span></label>
-                            <input asp-for="Room" class="form-control" required>
+                            <label for="Doorsystem_Room" class="form-label">Room <span class="text-danger">*</span></label>
+                            <input id="Doorsystem_Room" name="Doorsystem.Room" class="form-control" required />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="TimeRange" class="form-label">時段 <span class="text-danger">*</span></label>
-                            <input asp-for="TimeRange" class="form-control" required>
+                            <label for="Doorsystem_TimeRange" class="form-label">時段 <span class="text-danger">*</span></label>
+                            <input id="Doorsystem_TimeRange" name="Doorsystem.TimeRange" class="form-control" required />
                         </div>
                     </form>
                 </div>
@@ -87,23 +104,19 @@
 
     <script>
         function showAddDoorSystemModal() {
-            // 清空表单中的值
             document.getElementById("addDoorSystemForm").reset();
             $('#addDoorSystemModal').modal('show');
         }
 
         function addDoorSystem() {
-            // 获取新增门禁系统的各个字段的值
-            var date = document.getElementById('Date').value;
-            var session = document.getElementById('Session').value;
-            var sessionName = document.getElementById('SessionName').value;
-            var room = document.getElementById('Room').value;
-            var timeRange = document.getElementById('TimeRange').value;
+            var date = document.querySelector('[name="Doorsystem.Date"]').value;
+            var session = document.querySelector('[name="Doorsystem.Session"]').value;
+            var sessionName = document.querySelector('[name="Doorsystem.SessionName"]').value;
+            var room = document.querySelector('[name="Doorsystem.Room"]').value;
+            var timeRange = document.querySelector('[name="Doorsystem.TimeRange"]').value;
 
-            // 创建一个新的表格行
             var newRow = document.createElement("tr");
 
-            // 在表格行中创建表格数据单元格并添加新增门禁系统信息
             var dateCell = document.createElement("td");
             dateCell.textContent = date;
             var sessionCell = document.createElement("td");
@@ -115,17 +128,14 @@
             var timeRangeCell = document.createElement("td");
             timeRangeCell.textContent = timeRange;
 
-            // 将单元格添加到新的表格行中
             newRow.appendChild(dateCell);
             newRow.appendChild(sessionCell);
             newRow.appendChild(sessionNameCell);
             newRow.appendChild(roomCell);
             newRow.appendChild(timeRangeCell);
 
-            // 将新的表格行添加到表格的 tbody 中
             document.getElementById("DoorSystemTable").appendChild(newRow);
 
-            // 添加完毕后关闭模态框
             $('#addDoorSystemModal').modal('hide');
         }
     </script>

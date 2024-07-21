@@ -1,11 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Heysundue.Models;
 using Heysundue.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc; // 確保引入了這個命名空間
-
 
 namespace Heysundue.Pages
 {
@@ -18,11 +17,18 @@ namespace Heysundue.Pages
             _context = context;
         }
 
-        public IList<Joinlist> Joinlists { get; set; }
+        public IList<Joinlist> Joinlists { get; set; } = new List<Joinlist>();
+
+        [BindProperty]
+        public string? SearchColumn { get; set; }
+
+        [BindProperty]
+        public string? SearchKeyword { get; set; }
 
         public async Task OnGetAsync()
         {
             Joinlists = await _context.Joinlists.ToListAsync();
+            ViewData["Title"] = "報名人員管理系統";
         }
 
         public async Task<IActionResult> OnPostAsync(Joinlist newJoinlist)
@@ -37,6 +43,39 @@ namespace Heysundue.Pages
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Joinlist2");
+        }
+
+        public async Task<IActionResult> OnPostSearchAsync()
+        {
+            var query = _context.Joinlists.AsQueryable();
+
+            if (!string.IsNullOrEmpty(SearchColumn) && !string.IsNullOrEmpty(SearchKeyword))
+            {
+                switch (SearchColumn.ToLower())
+                {
+                    case "regno":
+                        query = query.Where(j => j.RegNo.Contains(SearchKeyword));
+                        break;
+                    case "firstname":
+                        query = query.Where(j => j.FirstName.Contains(SearchKeyword));
+                        break;
+                    case "lastname":
+                        query = query.Where(j => j.LastName.Contains(SearchKeyword));
+                        break;
+                    case "chinesename":
+                        query = query.Where(j => j.ChineseName.Contains(SearchKeyword));
+                        break;
+                    case "country":
+                        query = query.Where(j => j.Country.Contains(SearchKeyword));
+                        break;
+                    case "registrationstatus":
+                        query = query.Where(j => j.RegistrationStatus.Contains(SearchKeyword));
+                        break;
+                }
+            }
+
+            Joinlists = await query.ToListAsync();
+            return Page();
         }
     }
 }
