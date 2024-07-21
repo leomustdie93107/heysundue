@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Heysundue.Migrations.Article
 {
     [DbContext(typeof(ArticleContext))]
-    partial class ArticleContextModelSnapshot : ModelSnapshot
+    [Migration("20240701072956_UpdateArticleMode64")]
+    partial class UpdateArticleMode64
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -34,7 +37,7 @@ namespace Heysundue.Migrations.Article
                     b.Property<string>("Session")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("StartDate")
+                    b.Property<string>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -99,7 +102,7 @@ namespace Heysundue.Migrations.Article
 
                     b.HasKey("ID");
 
-                    b.ToTable("Doorsystems");
+                    b.ToTable("Doorsystem");
                 });
 
             modelBuilder.Entity("Heysundue.Models.Joinlist", b =>
@@ -204,7 +207,7 @@ namespace Heysundue.Migrations.Article
 
                     b.HasKey("ID");
 
-                    b.ToTable("Registrations");
+                    b.ToTable("Registration");
                 });
 
             modelBuilder.Entity("Heysundue.Models.Accessdoor", b =>

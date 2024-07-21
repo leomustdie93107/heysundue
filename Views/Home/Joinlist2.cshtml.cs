@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Threading.Tasks;
 using Heysundue.Models;
 using Heysundue.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Heysundue.Pages
@@ -14,28 +15,67 @@ namespace Heysundue.Pages
         public Joinlist2Model(ArticleContext context)
         {
             _context = context;
-            Joinlist = new Joinlist();
         }
+
+        public IList<Joinlist> Joinlists { get; set; } = new List<Joinlist>();
 
         [BindProperty]
-        public Joinlist Joinlist { get; set; }
+        public string? SearchColumn { get; set; }
 
-        public IActionResult OnGet()
+        [BindProperty]
+        public string? SearchKeyword { get; set; }
+
+        public async Task OnGetAsync()
         {
-            return Page();
+            Joinlists = await _context.Joinlists.ToListAsync();
+            ViewData["Title"] = "報名人員管理系統";
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(Joinlist newJoinlist)
         {
             if (!ModelState.IsValid)
             {
+                Joinlists = await _context.Joinlists.ToListAsync();
                 return Page();
             }
 
-            _context.Joinlist.Add(Joinlist);
+            _context.Joinlists.Add(newJoinlist);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Joinlist2");
+        }
+
+        public async Task<IActionResult> OnPostSearchAsync()
+        {
+            var query = _context.Joinlists.AsQueryable();
+
+            if (!string.IsNullOrEmpty(SearchColumn) && !string.IsNullOrEmpty(SearchKeyword))
+            {
+                switch (SearchColumn.ToLower())
+                {
+                    case "regno":
+                        query = query.Where(j => j.RegNo.Contains(SearchKeyword));
+                        break;
+                    case "firstname":
+                        query = query.Where(j => j.FirstName.Contains(SearchKeyword));
+                        break;
+                    case "lastname":
+                        query = query.Where(j => j.LastName.Contains(SearchKeyword));
+                        break;
+                    case "chinesename":
+                        query = query.Where(j => j.ChineseName.Contains(SearchKeyword));
+                        break;
+                    case "country":
+                        query = query.Where(j => j.Country.Contains(SearchKeyword));
+                        break;
+                    case "registrationstatus":
+                        query = query.Where(j => j.RegistrationStatus.Contains(SearchKeyword));
+                        break;
+                }
+            }
+
+            Joinlists = await query.ToListAsync();
+            return Page();
         }
     }
 }

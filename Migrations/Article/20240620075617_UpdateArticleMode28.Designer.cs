@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Heysundue.Migrations.Article
 {
     [DbContext(typeof(ArticleContext))]
-    partial class ArticleContextModelSnapshot : ModelSnapshot
+    [Migration("20240620075617_UpdateArticleMode28")]
+    partial class UpdateArticleMode28
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -20,9 +23,6 @@ namespace Heysundue.Migrations.Article
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("AccessdoorID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Room")
@@ -34,14 +34,12 @@ namespace Heysundue.Migrations.Article
                     b.Property<string>("Session")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("StartDate")
+                    b.Property<string>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("AccessdoorID");
-
-                    b.ToTable("Accessdoors");
+                    b.ToTable("Accessdoor");
                 });
 
             modelBuilder.Entity("Heysundue.Models.Article", b =>
@@ -99,7 +97,7 @@ namespace Heysundue.Migrations.Article
 
                     b.HasKey("ID");
 
-                    b.ToTable("Doorsystems");
+                    b.ToTable("Doorsystem");
                 });
 
             modelBuilder.Entity("Heysundue.Models.Joinlist", b =>
@@ -169,14 +167,17 @@ namespace Heysundue.Migrations.Article
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PersonID")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("PersonID");
 
                     b.ToTable("Persons");
                 });
@@ -204,14 +205,7 @@ namespace Heysundue.Migrations.Article
 
                     b.HasKey("ID");
 
-                    b.ToTable("Registrations");
-                });
-
-            modelBuilder.Entity("Heysundue.Models.Accessdoor", b =>
-                {
-                    b.HasOne("Heysundue.Models.Accessdoor", null)
-                        .WithMany("AllAccessdoor")
-                        .HasForeignKey("AccessdoorID");
+                    b.ToTable("Registration");
                 });
 
             modelBuilder.Entity("Heysundue.Models.Joinlist", b =>
@@ -221,14 +215,21 @@ namespace Heysundue.Migrations.Article
                         .HasForeignKey("JoinlistID");
                 });
 
-            modelBuilder.Entity("Heysundue.Models.Accessdoor", b =>
+            modelBuilder.Entity("Heysundue.Models.Person", b =>
                 {
-                    b.Navigation("AllAccessdoor");
+                    b.HasOne("Heysundue.Models.Person", null)
+                        .WithMany("AllPersons")
+                        .HasForeignKey("PersonID");
                 });
 
             modelBuilder.Entity("Heysundue.Models.Joinlist", b =>
                 {
                     b.Navigation("AllJoinlist");
+                });
+
+            modelBuilder.Entity("Heysundue.Models.Person", b =>
+                {
+                    b.Navigation("AllPersons");
                 });
 #pragma warning restore 612, 618
         }

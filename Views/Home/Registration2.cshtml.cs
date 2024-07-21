@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 using Heysundue.Models;
 using Heysundue.Data;
-using System.Threading.Tasks;
 
 namespace Heysundue.Pages
 {
@@ -22,6 +21,7 @@ namespace Heysundue.Pages
 
         public IActionResult OnGet()
         {
+            ViewData["Title"] = "Registration Category設定";
             return Page();
         }
 
@@ -29,10 +29,11 @@ namespace Heysundue.Pages
         {
             if (!ModelState.IsValid)
             {
+                ViewData["Title"] = "Registration Category設定";
                 return Page();
             }
 
-            _context.Registration.Add(Registration);
+            _context.Registrations.Add(Registration);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
