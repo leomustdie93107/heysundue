@@ -52,6 +52,15 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult UserList()
+    {
+        return View();
+    }public IActionResult InputUser()
+    
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
