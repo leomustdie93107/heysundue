@@ -1,9 +1,6 @@
-﻿@{
-    var currentUserRole = Context.Session.GetString("UserRole");
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,6 +10,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Heysundue.styles.css" asp-append-version="true" />
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -42,40 +40,27 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
                         </li>
-
-                        @if(currentUserRole == "Root" || currentUserRole == "Admin")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="SetDate">研討會日期設定</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="SetDate3">研討會日期設定3</a>
-                            </li>
-                        }
-
-                        @if(currentUserRole == "Guest" || currentUserRole == "Admin" || currentUserRole == "Root")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Registration2">Registration</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Joinlist2">Joinlist</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Accessdoor2">Accessdoor</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Doorsystem2">Doorsystem</a>
-                            </li>
-                        }
-
-                        <li><a asp-controller="Articles" asp-action="Create">可連結頁</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                asp-action="SetDate">研討會日期設定</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                asp-action="Registration">Registration</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                asp-action="Joinlist">Joinlist</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                asp-action="Accessdoor">Accessdoor</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
+                                asp-action="Doorsystem">Doorsystem</a>
+                        </li>
+                        <li><a asp-controller="Articles" asp-action="Create">可連結頁面</a></li>
                     </ul>
                 </div>
             </div>
@@ -87,30 +72,10 @@
         </main>
     </div>
 
-    <footer>
-        <div class="footer">
-            <div class="container">
-                <div class="row">
-                    <div>
-                        <h3>這邊可以註記登入者身分</h3>
-                        <p>@currentUserRole</p>
-                    </div>
-                    <div>
-                        <h3>學會地址</h3>
-                        <p>台北市天龍區天龍路三段888號</p>
-                    </div>
-                    <div>
-                        <h3>連絡電話</h3>
-                        <p>0912345678</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
