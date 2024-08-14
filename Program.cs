@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Heysundue.Data;
 using Heysundue.Models;
-var builder = WebApplication.CreateBuilder(args);
 
+var builder = WebApplication.CreateBuilder(args);
 var env = builder.Environment;
 
 builder.Services.AddControllersWithViews();
