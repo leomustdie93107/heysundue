@@ -28,46 +28,65 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Index</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Banner">Banner</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Banner">Banner</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login2">Login</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Inputuser2">Inputuser2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="UserList2">UserList2</a>
+                        </li>
 
-                        @if(currentUserRole == "Root" || currentUserRole == "Admin")
+                        @if(currentUserRole == "Root")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="SetDate">研討會日期設定</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SetDate">研討會日期設定</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="SetDate3">研討會日期設定3</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SetDate3">研討會日期設定3</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminSettings">系統管理</a>
                             </li>
                         }
 
-                        @if(currentUserRole == "Guest" || currentUserRole == "Admin" || currentUserRole == "Root")
+                        @if(currentUserRole == "Admin" || currentUserRole == "Root")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Registration2">Registration</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminDashboard">管理控制台</a>
+                            </li>
+                        }
+
+                        @if(currentUserRole == "Member" || currentUserRole == "Admin" || currentUserRole == "Root")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Registration2">Registration</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Joinlist2">Joinlist</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Joinlist2">Joinlist</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Accessdoor2">Accessdoor</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Accessdoor2">Accessdoor</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                    asp-action="Doorsystem2">Doorsystem</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Doorsystem2">Doorsystem</a>
                             </li>
                         }
 
                         <li><a asp-controller="Articles" asp-action="Create">可連結頁</a></li>
+                    </ul>
+
+                    <!-- 新增登出按钮 -->
+                    <ul class="navbar-nav">
+                        @if(currentUserRole != "Guest")
+                        {
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='@Url.Action("Logout", "Home")'">登出</button>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

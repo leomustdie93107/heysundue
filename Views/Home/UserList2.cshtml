@@ -1,0 +1,116 @@
+@model Heysundue.Views.Home.Userlist2Model
+
+@{
+    ViewData["Title"] = "用戶管理系統";
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用戶管理系統</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">用戶管理名單</h2>
+
+        <div class="row mb-3">
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary mb-2" onclick="window.location.href='@Url.Action("InputUser2", "Home")'">新增用戶</button>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-2">
+                <select id="searchColumn" class="form-select text-uppercase bg-light">
+                    <option value="all">選擇搜尋欄位:</option>
+                    <option value="username">User Name</option>
+                    <option value="phone">Phone</option>
+                    <option value="email">Email</option>
+                    <option value="level">Level</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <input type="text" id="searchKeyword" class="form-control">
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" onclick="searchKeyword()">搜尋</button>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <form id="editMembersForm" method="post" asp-action="UpdateUser" asp-controller="Home">
+                    <table class="table">
+                        <thead class="custom-table-header">
+                            <tr>
+                                <th>ID</th>
+                                <th>Creation Date</th>
+                                <th>User Name</th>
+                                <th>Password</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Level</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                            @foreach (var member in Model.Members)
+                            {
+                                <tr>
+                                    <td>@member.ID</td>
+                                    <td>@member.Date?.ToString("yyyy-MM-dd")</td> <!-- 這裡顯示創建日期 -->
+                                    <td><input type="text" name="userName_@member.ID" value="@member.UserName" class="form-control" /></td>
+                                    <td><input type="text" name="userPassword_@member.ID" value="@member.UserPassword" class="form-control" /></td>
+                                    <td><input type="text" name="phone_@member.ID" value="@member.Phone" class="form-control" /></td>
+                                    <td><input type="email" name="email_@member.ID" value="@member.Email" class="form-control" /></td>
+                                    <td>
+                                        <select name="level_@member.ID" class="form-select">
+                                            @foreach (var option in Model.LevelOptions)
+                                            {
+                                                if (option.Value == member.Level)
+                                                {
+                                                    <option value="@option.Value" selected="selected">@option.Text</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@option.Value">@option.Text</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" name="memberId" value="@member.ID" class="btn btn-success">Save</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchKeyword() {
+            var column = document.getElementById("searchColumn").value;
+            var keyword = document.getElementById("searchKeyword").value;
+
+            $.ajax({
+                url: '@Url.Action("SearchMember", "Home")',
+                type: 'POST',
+                data: {
+                    searchColumn: column,
+                    searchKeyword: keyword
+                },
+                success: function (data) {
+                    $('#memberTableBody').html(data);
+                }
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

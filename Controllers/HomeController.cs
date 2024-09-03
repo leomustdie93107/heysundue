@@ -5,6 +5,7 @@ using Heysundue.Views.Home;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Heysundue.Controllers
 {
@@ -18,21 +19,94 @@ namespace Heysundue.Controllers
         }
 
 
-        private readonly Dictionary<string, string> _credentials = new Dictionary<string, string>
+    [HttpGet]
+    public IActionResult Logout()
+    {
+        // 将用户角色状态设置为 Guest
+        HttpContext.Session.SetString("UserRole", "Guest");
+
+        // 重定向到主页或登录页面
+        return RedirectToAction("Login2", "Home");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Userlist2()
+    {
+        var model = new Userlist2Model
         {
-            { "root", "rootpassword" },
-            { "admin", "adminpassword" },
-            { "guest", "guestpassword" }
+            Members = await _context.Members.ToListAsync(),
+            LevelOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Root", Text = "Root" },
+                new SelectListItem { Value = "Admin", Text = "Admin" },
+                new SelectListItem { Value = "Member", Text = "Member" }
+            }
         };
 
-        private readonly Dictionary<string, string> _roles = new Dictionary<string, string>
+    return View(model);
+}
+
+    
+[HttpPost]
+public async Task<IActionResult> UpdateUser(int memberId)
+{
+    var member = await _context.Members.FindAsync(memberId);
+    if (member == null)
+    {
+        return NotFound();
+    }
+
+    // 通过 Request.Form 读取每个字段的值
+    var userName = Request.Form[$"userName_{memberId}"];
+    var userPassword = Request.Form[$"userPassword_{memberId}"];
+    var phone = Request.Form[$"phone_{memberId}"];
+    var email = Request.Form[$"email_{memberId}"];
+    var level = Request.Form[$"level_{memberId}"];
+
+    // 更新用户信息
+    member.UserName = userName;
+    member.UserPassword = userPassword;
+    member.Phone = int.Parse(phone); // 确保 phone 是 int 类型
+    member.Email = email;
+    member.Level = level;
+
+    await _context.SaveChangesAsync();
+
+    return RedirectToAction("Userlist2");
+}
+
+
+
+
+
+    [HttpPost]
+public async Task<IActionResult> SearchUserlist2(string searchColumn, string searchKeyword)
+{
+    var query = _context.Members.AsQueryable();
+
+    if (!string.IsNullOrEmpty(searchColumn) && !string.IsNullOrEmpty(searchKeyword))
+    {
+        switch (searchColumn.ToLower())
         {
-            { "root", "Root" },
-            { "admin", "Admin" },
-            { "guest", "Guest" }
-        };
+            case "username":
+                query = query.Where(m => m.UserName.Contains(searchKeyword));
+                break;
+            case "phone":
+                query = query.Where(m => m.Phone.ToString().Contains(searchKeyword));
+                break;
+            case "email":
+                query = query.Where(m => m.Email.Contains(searchKeyword));
+                break;
+            case "level":
+                query = query.Where(m => m.Level.Contains(searchKeyword));
+                break;
+        }
+    }
 
-
+    var members = await query.ToListAsync();
+    return PartialView("_UserlistTablePartial", members); // Assuming you have a partial view for displaying the table.
+}
+    
 
         public IActionResult Index()
         {
@@ -47,7 +121,7 @@ namespace Heysundue.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login2(Login login)
+        public async Task<IActionResult> Login2(Login login)
         {
             Console.WriteLine("OnPost 方法被调用");
 
@@ -60,13 +134,19 @@ namespace Heysundue.Controllers
 
             Console.WriteLine("模型验证成功");
 
-            if (_credentials.ContainsKey(login.Username) && _credentials[login.Username] == login.Password)
+            // 查詢資料庫中的 Member 表，檢查是否有匹配的用戶名和密碼
+            var member = await _context.Members
+                .FirstOrDefaultAsync(m => m.UserName == login.Username && m.UserPassword == login.Password);
+
+            if (member != null)
             {
-                HttpContext.Session.SetString("UserRole", _roles[login.Username]);
-                Console.WriteLine("登录成功，用户角色：" + _roles[login.Username]);
+                // 如果找到匹配的用戶，將 Level 存入 Session
+                HttpContext.Session.SetString("UserRole", member.Level);
+                Console.WriteLine("登录成功，用户角色：" + member.Level);
                 return RedirectToAction("Index");
             }
 
+            // 如果未找到匹配的用戶，返回錯誤信息
             ModelState.AddModelError(string.Empty, "无效的登录尝试");
             Console.WriteLine("登录失败，用户名或密码错误。");
             return View(login);
@@ -102,6 +182,16 @@ namespace Heysundue.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult InputUser2()
+        {
+            var model = new InputUser2ViewModel
+            {
+                Members = _context.Members.ToList()
+                
+            };
+            return View(model);
+        }
         public IActionResult Login()
         {
             return View();
@@ -302,7 +392,21 @@ namespace Heysundue.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> InputUser2(InputUser2ViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Member.Date = DateTime.Now;
+                model.Member.Level = "Member";
+                _context.Members.Add(model.Member);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
 
+            model.Members = _context.Members.ToList();
+            return View(model);
+        }
 
 
 

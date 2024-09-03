@@ -1,31 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.Linq;
 using Heysundue.Models;
-using System;
+using System.Linq;
 
 namespace Heysundue.Pages
 {
     public class Login2Model : PageModel
     {
-        private readonly Dictionary<string, string> _credentials = new Dictionary<string, string>
-        {
-            { "root", "rootpassword" },
-            { "admin", "adminpassword" },
-            { "guest", "guestpassword" }
-        };
+        private readonly ArticleContext _context;
 
-        private readonly Dictionary<string, string> _roles = new Dictionary<string, string>
+        public Login2Model(ArticleContext context)
         {
-            { "root", "Root" },
-            { "admin", "Admin" },
-            { "guest", "Guest" }
-        };
-
-        public Login2Model()
-        {
+            _context = context;
             Login = new Login();
         }
 
@@ -39,30 +26,24 @@ namespace Heysundue.Pages
 
         public IActionResult OnPost()
         {
-            Console.WriteLine("OnPost 方法被调用");
-
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, "模型验证失败");
-                Console.WriteLine("模型验证失败");
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine($"错误键: {error.Key}, 错误信息: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
-                }
                 return Page();
             }
 
-            Console.WriteLine("模型验证成功");
+            // 查詢資料庫中的 Member 表，檢查是否有匹配的用戶名和密碼
+            var member = _context.Members
+                .FirstOrDefault(m => m.UserName == Login.Username && m.UserPassword == Login.Password);
 
-            if (_credentials.ContainsKey(Login.Username) && _credentials[Login.Username] == Login.Password)
+            if (member != null)
             {
-                HttpContext.Session.SetString("UserRole", _roles[Login.Username]);
-                Console.WriteLine("登录成功，用户角色：" + _roles[Login.Username]);
+                // 如果找到匹配的用戶，將 Level 存入 Session
+                HttpContext.Session.SetString("UserRole", member.Level);
                 return RedirectToPage("./Index");
             }
 
             ModelState.AddModelError(string.Empty, "无效的登录尝试");
-            Console.WriteLine("登录失败，用户名或密码错误。");
             return Page();
         }
     }
