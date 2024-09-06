@@ -1,5 +1,6 @@
 ﻿@{
     var currentUserRole = Context.Session.GetString("UserRole");
+    var favicon = Context.Session.GetString("Favicon") ?? "yes.png"; // 默认为 yes.png
 }
 
 <!DOCTYPE html>
@@ -7,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="./images/yes.png" type="img/123.jpg" />
+    <link rel="icon" href="~/images/@favicon" type="image/x-icon" />
     <title>@ViewData["Title"] 中華民國心率協會</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -17,7 +18,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">中華民國心率協會</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index2">中華民國心率協會</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,20 +26,14 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Index</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index2">Index</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Banner">Banner</a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login2">Login</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Inputuser2">Inputuser2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="UserList2">UserList2</a>
-                        </li>
+
+                        
 
                         @if(currentUserRole == "Root")
                         {
@@ -46,17 +41,29 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SetDate">研討會日期設定</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SetDate3">研討會日期設定3</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Inputuser2">Inputuser2</a>
+                             </li>
+                            //<li class="nav-item">
+                            //   <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SetDate3">研討會日期設定3</a>
+                            //</li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login2">系統管理(無功能展示用)</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminSettings">系統管理</a>
-                            </li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="UserList2">UserList2</a>
+                        </li>
                         }
 
                         @if(currentUserRole == "Admin" || currentUserRole == "Root")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminDashboard">管理控制台</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login2">管理控制台(無功能展示用)</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Banner" asp-action="Banner2">Banner</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Joinlist2">Joinlist</a>
                             </li>
                         }
 
@@ -65,9 +72,7 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Registration2">Registration</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Joinlist2">Joinlist</a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Accessdoor2">Accessdoor</a>
                             </li>
@@ -75,8 +80,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Doorsystem2">Doorsystem</a>
                             </li>
                         }
-
-                        <li><a asp-controller="Articles" asp-action="Create">可連結頁</a></li>
                     </ul>
 
                     <!-- 新增登出按钮 -->

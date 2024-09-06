@@ -1,0 +1,90 @@
+@using System.IO
+@{
+    ViewData["Title"] = "Banner 上傳";
+
+    // 獲取圖片文件夾的完整路徑
+    var imageFolderPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+    // 用於存儲圖片文件名的列表
+    var imageFiles = new List<string>();
+
+    // 檢查文件夾是否存在，然後讀取所有圖片文件
+    if (Directory.Exists(imageFolderPath))
+    {
+        imageFiles = Directory.GetFiles(imageFolderPath)
+                              .Select(f => System.IO.Path.GetFileName(f))  // 獲取文件名
+                              .ToList();
+    }
+
+    // 確認是否有文件存在
+    var hasFiles = imageFiles.Any();
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">@ViewData["Title"]</h2>
+
+        <!-- 圖片上傳表單 -->
+        <form asp-controller="Banner" asp-action="UploadBanner" method="post" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <div class="col-12 col-md-6">
+                    <label for="fileUpload" class="form-label">選擇要上傳的圖片：</label>
+                    <input type="file" class="form-control" id="fileUpload" name="fileUpload">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">上傳圖片</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 圖片選擇表單 -->
+        @if (hasFiles)
+        {
+            <form asp-action="SetIcon" method="post">
+                <div class="row mb-3">
+                    <div class="col-12 col-md-6">
+                        <label for="iconSelect" class="form-label">選擇圖片作為圖標：</label>
+                        <select id="iconSelect" name="selectedIcon" class="form-control">
+                            @foreach (var image in imageFiles)
+                            {
+                                <option value="@image">@image</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn btn-success">設置為圖標</button>
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+            <p class="text-danger">當前沒有可用的圖片。</p>
+        }
+
+        <!-- 顯示上傳結果 -->
+        @if (TempData["UploadResult"] != null)
+        {
+            <div class="alert alert-info mt-3">
+                @TempData["UploadResult"]
+            </div>
+        }
+    </div>
+
+</body>
+
+</html>

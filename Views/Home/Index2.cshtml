@@ -1,5 +1,9 @@
 @{
-    Layout = null;
+    // 使用預設的佈局
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // 使用 Session 獲取圖片
+    var selectedImage = Context.Session.GetString("Favicon") ?? "default.jpg";  // 如果 Session 没有值，使用默认图片
 }
 
 <!DOCTYPE html>
@@ -19,7 +23,8 @@
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center">
-                    <img src="~/images/123.jpg" alt="heart" class="heart">
+                    <!-- 動態顯示選擇的圖片 -->
+                    <img src="/images/@selectedImage" alt="heart" class="heart">
                     <h2>Welcome to Your Website</h2>
                     <p>This is the content area.</p>
                 </div>

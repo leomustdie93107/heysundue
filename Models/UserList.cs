@@ -12,5 +12,8 @@ namespace Heysundue.Views.Home
 
         public string? SearchColumn { get; set; }
         public string? SearchKeyword { get; set; }
+
+        public int CurrentPage { get; set; }  // 當前頁數
+        public int TotalPages { get; set; }   // 總頁數
     }
 }

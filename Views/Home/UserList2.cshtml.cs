@@ -45,32 +45,33 @@ namespace Heysundue.Pages
         }
 
 
-        public async Task<IActionResult> OnPostSearchAsync()
+        public async Task<IActionResult> OnPostSearchAsync(string searchColumn, string searchKeyword)
+{
+    var query = _context.Members.AsQueryable();
+
+    if (!string.IsNullOrEmpty(searchColumn) && !string.IsNullOrEmpty(searchKeyword))
+    {
+        switch (searchColumn.ToLower())
         {
-            var query = _context.Members.AsQueryable();
-
-            if (!string.IsNullOrEmpty(SearchColumn) && !string.IsNullOrEmpty(SearchKeyword))
-            {
-                switch (SearchColumn.ToLower())
-                {
-                    case "username":
-                        query = query.Where(m => m.UserName.Contains(SearchKeyword));
-                        break;
-                    case "phone":
-                        query = query.Where(m => m.Phone.ToString().Contains(SearchKeyword));
-                        break;
-                    case "email":
-                        query = query.Where(m => m.Email.Contains(SearchKeyword));
-                        break;
-                    case "level":
-                        query = query.Where(m => m.Level.Contains(SearchKeyword));
-                        break;
-                }
-            }
-
-            Members = await query.ToListAsync();
-            return Page();
+            case "username":
+                query = query.Where(m => m.UserName.Contains(searchKeyword));
+                break;
+            case "phone":
+                query = query.Where(m => m.Phone.ToString().Contains(searchKeyword));
+                break;
+            case "email":
+                query = query.Where(m => m.Email.Contains(searchKeyword));
+                break;
+            case "level":
+                query = query.Where(m => m.Level.Contains(searchKeyword));
+                break;
         }
+    }
+
+    Members = await query.ToListAsync();
+    return Partial("_MemberListPartial", Members); // 返回局部視圖
+}
+
 
         public async Task<IActionResult> OnPostAsync(int memberId, string userName, string userPassword, int phone, string email, string level)
         {

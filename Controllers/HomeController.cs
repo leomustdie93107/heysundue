@@ -44,7 +44,7 @@ namespace Heysundue.Controllers
         };
 
     return View(model);
-}
+    }
 
     
 [HttpPost]
@@ -76,14 +76,28 @@ public async Task<IActionResult> UpdateUser(int memberId)
 }
 
 
+        [HttpPost]
+        public IActionResult SetIcon(string selectedIcon)
+        {
+            // 将用户选择的图标存储到 Session 中
+            HttpContext.Session.SetString("Favicon", selectedIcon);
 
-
-
+            // 重定向回 Banner2 页面
+            return RedirectToAction("Banner2");
+        }
     [HttpPost]
-public async Task<IActionResult> SearchUserlist2(string searchColumn, string searchKeyword)
-{
+    public async Task<IActionResult> SearchUserlist2(string searchColumn, string searchKeyword, DateTime? searchDate, int page = 1)
+    {
+    int pageSize = 10;  // 每頁顯示 10 條記錄
     var query = _context.Members.AsQueryable();
 
+    // 日期篩選
+    if (searchDate.HasValue)
+    {
+        query = query.Where(m => m.Date >= searchDate.Value);
+    }
+
+    // 搜尋欄位和關鍵字篩選
     if (!string.IsNullOrEmpty(searchColumn) && !string.IsNullOrEmpty(searchKeyword))
     {
         switch (searchColumn.ToLower())
@@ -103,12 +117,37 @@ public async Task<IActionResult> SearchUserlist2(string searchColumn, string sea
         }
     }
 
-    var members = await query.ToListAsync();
-    return PartialView("_UserlistTablePartial", members); // Assuming you have a partial view for displaying the table.
-}
-    
+    // 計算總頁數
+    int totalRecords = await query.CountAsync();
+    int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
 
-        public IActionResult Index()
+    // 取得當前頁的數據
+    var members = await query
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+    // 構建模型
+    var model = new Userlist2Model
+    {
+        Members = members,
+        CurrentPage = page,
+        TotalPages = totalPages,
+        LevelOptions = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "Root", Text = "Root" },
+            new SelectListItem { Value = "Admin", Text = "Admin" },
+            new SelectListItem { Value = "Member", Text = "Member" }
+        }
+    };
+
+    // 返回部分視圖
+    return PartialView("_MemberListPartial", model);
+}
+
+
+        
+        public IActionResult Index2()
         {
             return View();
         }
@@ -143,7 +182,7 @@ public async Task<IActionResult> SearchUserlist2(string searchColumn, string sea
                 // 如果找到匹配的用戶，將 Level 存入 Session
                 HttpContext.Session.SetString("UserRole", member.Level);
                 Console.WriteLine("登录成功，用户角色：" + member.Level);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index2");
             }
 
             // 如果未找到匹配的用戶，返回錯誤信息
@@ -302,7 +341,7 @@ public async Task<IActionResult> SearchUserlist2(string searchColumn, string sea
             {
                 _context.Add(article);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index2");
             }
             return View(article);
         }
@@ -385,7 +424,7 @@ public async Task<IActionResult> SearchUserlist2(string searchColumn, string sea
             {
                 _context.Persons.Add(model.Person);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index2");
             }
 
             model.Persons = _context.Persons.ToList();
@@ -401,7 +440,7 @@ public async Task<IActionResult> SearchUserlist2(string searchColumn, string sea
                 model.Member.Level = "Member";
                 _context.Members.Add(model.Member);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index2");
             }
 
             model.Members = _context.Members.ToList();

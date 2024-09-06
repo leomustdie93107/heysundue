@@ -30,7 +30,7 @@ namespace Heysundue.Controllers
             {
                 _context.Add(article);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index2", "Home");
             }
             return View(article);
         }

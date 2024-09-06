@@ -1,0 +1,31 @@
+@model Heysundue.Views.Home.Userlist2Model
+
+@foreach (var member in Model.Members)
+{
+    <tr>
+        <td>@member.ID</td>
+        <td>@member.Date?.ToString("yyyy-MM-dd")</td>
+        <td><input type="text" name="userName_@member.ID" value="@member.UserName" class="form-control" /></td>
+        <td><input type="text" name="userPassword_@member.ID" value="@member.UserPassword" class="form-control" /></td>
+        <td><input type="text" name="phone_@member.ID" value="@member.Phone" class="form-control" /></td>
+        <td><input type="email" name="email_@member.ID" value="@member.Email" class="form-control" /></td>
+        <td>
+            <select name="level_@member.ID" class="form-select">
+                @foreach (var option in Model.LevelOptions)
+                {
+                    if (option.Value == member.Level)
+                    {
+                        <option value="@option.Value" selected="selected">@option.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </td>
+        <td>
+            <button type="submit" name="memberId" value="@member.ID" class="btn btn-success">Save</button>
+        </td>
+    </tr>
+}
